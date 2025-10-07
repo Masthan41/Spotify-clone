@@ -15,5 +15,4 @@ A responsive web-based music player built with **HTML, CSS, and JavaScript**. Th
 
 - **HTML5** – Structure and layout
 - **CSS3** – Styling and responsive design
-- **JavaScript** – Interactivity and functionality
-   git clone https://github.com/your-username/spotify-clone.git
+- **JavaScript** – Interactivity and functionality.
