@@ -10,10 +10,6 @@ A responsive web-based music player built with **HTML, CSS, and JavaScript**. Th
 - **Responsive Design:** Works seamlessly on mobile, tablet, and desktop screens.
 - **Smooth Navigation:** Intuitive UI for easy browsing and interaction.
 
-## Demo
-
-You can view the live demo here:  
-*(Add your live site link if hosted, e.g., GitHub Pages or Netlify)*
 
 ## Technologies Used
 
