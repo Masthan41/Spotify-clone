@@ -71,7 +71,7 @@ const playMusic = (track, pause = false) => {
         console.warn('playMusic called without a valid track');
         document.querySelector('.songinfo').innerHTML = 'No track selected';
         document.querySelector('.songtime').innerHTML = '00:00 / 00:00';
-        if (typeof play !== 'undefined' && play) play.src = 'play.svg';
+        if (typeof play !== 'undefined' && play) play.src = 'assets/play.svg';
         return;
     }
     // Build a safe, encoded URL for the audio source.
@@ -94,10 +94,10 @@ const playMusic = (track, pause = false) => {
             playPromise.catch(err => {
                 console.warn('Audio playback failed (promise rejection):', err);
             }).then(() => {
-                if (typeof play !== 'undefined' && play) play.src = "pause.svg";
+                if (typeof play !== 'undefined' && play) play.src = "assets/pause.svg";
             });
         } else {
-            if (typeof play !== 'undefined' && play) play.src = "pause.svg";
+            if (typeof play !== 'undefined' && play) play.src = "assets/pause.svg";
         }
     }
     document.querySelector(".songinfo").innerHTML = decodeURI(track)
@@ -120,14 +120,14 @@ function displaySongsInPlaylist(songsToDisplay) {
     for (const song of validSongs) {
         const displayName = decodeURIComponent(song);
         // store the raw track filename in a data attribute so click handlers can use it directly
-        songUL.innerHTML += `<li data-track="${song}"><img class="invert" width="34" src="music.svg" alt="">
+        songUL.innerHTML += `<li data-track="${song}"><img class="invert" width="34" src="assets/music.svg" alt="">
                                 <div class="info">
                                     <div> ${displayName}</div>
                                     <div>Harry</div>
                                 </div>
                                 <div class="playnow">
                                     <span>Play Now</span>
-                                    <img class="invert" src="play.svg" alt="">
+                                    <img class="invert" src="assets/play.svg" alt="">
                                 </div> </li>`;
     }
 
@@ -137,6 +137,8 @@ function displaySongsInPlaylist(songsToDisplay) {
             const track = e.dataset.track;
             if (track) {
                 playMusic(track);
+                // update control play icon immediately to reflect playing state
+                if (typeof play !== 'undefined' && play) play.src = 'assets/pause.svg';
             }
         });
     });
@@ -299,10 +301,10 @@ async function main() {
     play.addEventListener("click", () => {
         if (currentSong.paused) {
             currentSong.play()
-            play.src = "pause.svg"
+            play.src = "assets/pause.svg"
         } else {
             currentSong.pause()
-            play.src = "play.svg"
+            play.src = "assets/play.svg"
         }
     })
 
@@ -336,17 +338,24 @@ async function main() {
 
     // Event listener for previous song
     previous.addEventListener("click", () => {
-        let index = songs.indexOf(currentSong.src.split("/").slice(-1)[0]);
+        // Decode the current filename from the audio src so it matches entries in `songs`
+        const currentEncoded = currentSong.src.split("/").slice(-1)[0] || '';
+        const currentName = decodeURIComponent(currentEncoded);
+        let index = Array.isArray(songs) ? songs.indexOf(currentName) : -1;
         if ((index - 1) >= 0) {
             playMusic(songs[index - 1]);
+            if (typeof play !== 'undefined' && play) play.src = 'assets/pause.svg';
         }
     })
 
     // Event listener for next song
     next.addEventListener("click", () => {
-        let index = songs.indexOf(currentSong.src.split("/").slice(-1)[0]);
-        if ((index + 1) < songs.length) {
+        const currentEncoded = currentSong.src.split("/").slice(-1)[0] || '';
+        const currentName = decodeURIComponent(currentEncoded);
+        let index = Array.isArray(songs) ? songs.indexOf(currentName) : -1;
+        if ((index + 1) < (Array.isArray(songs) ? songs.length : 0)) {
             playMusic(songs[index + 1]);
+            if (typeof play !== 'undefined' && play) play.src = 'assets/pause.svg';
         }
     })
 
